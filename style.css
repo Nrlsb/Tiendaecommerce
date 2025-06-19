@@ -2,16 +2,44 @@
   Hoja de estilos personalizados para la tienda online.
 */
 
-/* Aplicamos la fuente Inter como fuente principal a todo el cuerpo del documento */
-body {
-    font-family: 'Inter', sans-serif;
+/* Configuración base y fuentes */
+html {
+  scroll-behavior: smooth;
 }
 
-/* Clase de utilidad para una transición suave en todas las propiedades.
-  Se usa en enlaces, botones y tarjetas para animaciones al pasar el ratón por encima.
-*/
+body {
+    font-family: 'Inter', sans-serif;
+    background-color: #f8fafc; /* Un gris muy claro (slate-50) */
+    color: #334155; /* slate-700 */
+}
+
+/* Clases de utilidad para transiciones */
 .transition-all {
     transition-property: all;
     transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
     transition-duration: 300ms;
+}
+
+/* Estilos para los encabezados */
+h1, h2, h3 {
+    letter-spacing: -0.025em; /* tracking-tight */
+    color: #1e293b; /* slate-800 */
+}
+
+/* Animación sutil de aparición para las secciones */
+.fade-in-section {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+}
+
+.fade-in-section.is-visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Estilos mejorados para los inputs del formulario */
+.form-input {
+    @apply w-full p-3 border border-slate-300 rounded-lg shadow-sm transition-all;
+    @apply focus:ring-2 focus:ring-indigo-400 focus:border-indigo-400 focus:outline-none;
 }
