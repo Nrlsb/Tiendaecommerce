@@ -1,68 +1,81 @@
 /*
   script.js
-  Este archivo contiene toda la lógica de JavaScript para la interactividad de la página.
+  Este archivo contiene la lógica de JavaScript compartida en todo el sitio,
+  incluyendo la gestión del carrito de compras y el menú móvil.
 */
 
-// Esperamos a que todo el contenido del DOM (la estructura HTML) esté completamente cargado y parseado.
 document.addEventListener('DOMContentLoaded', () => {
     
+    // --- Gestión del Carrito de Compras (LocalStorage) ---
+
+    const cartCountElement = document.getElementById('cart-count');
+    const notificationModal = document.getElementById('notification-modal');
+    
+    // Función para añadir un producto al carrito
+    window.addToCart = function(product) {
+        let cart = JSON.parse(localStorage.getItem('cart')) || [];
+        
+        // Generar un ID único para el producto para evitar duplicados
+        const productId = `${product.name.replace(/\s+/g, '-')}-${product.price}`;
+
+        const existingProductIndex = cart.findIndex(item => item.id === productId);
+
+        if (existingProductIndex > -1) {
+            // Si el producto ya existe, incrementa la cantidad
+            cart[existingProductIndex].quantity += product.quantity;
+        } else {
+            // Si no existe, lo añade al carrito
+            cart.push({ ...product, id: productId });
+        }
+
+        // Guardar el carrito actualizado en localStorage
+        localStorage.setItem('cart', JSON.stringify(cart));
+        
+        // Actualizar el contador y mostrar notificación
+        updateCartCount();
+        showNotification();
+    }
+
+    // Función para actualizar el contador de items en el ícono del carrito
+    function updateCartCount() {
+        if (!cartCountElement) return;
+        const cart = JSON.parse(localStorage.getItem('cart')) || [];
+        // Suma la cantidad de todos los productos en el carrito
+        const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
+        cartCountElement.textContent = totalItems;
+
+        // Animar el contador
+        cartCountElement.classList.add('transform', 'scale-150', 'transition-transform', 'duration-200');
+        setTimeout(() => {
+            cartCountElement.classList.remove('transform', 'scale-150');
+        }, 200);
+    }
+    
+    // Función para mostrar notificación emergente
+    function showNotification() {
+        if (!notificationModal) return;
+        notificationModal.classList.remove('opacity-0', 'translate-y-10');
+        notificationModal.classList.add('opacity-100', 'translate-y-0');
+
+        setTimeout(() => {
+            notificationModal.classList.remove('opacity-100', 'translate-y-0');
+            notificationModal.classList.add('opacity-0', 'translate-y-10');
+        }, 3000);
+    }
+
     // --- Funcionalidad del Menú Móvil ---
     const mobileMenuButton = document.getElementById('mobile-menu-button');
     const mobileMenu = document.getElementById('mobile-menu');
 
-    // Añadimos un listener para el evento 'click' en el botón del menú.
     if (mobileMenuButton && mobileMenu) {
         mobileMenuButton.addEventListener('click', () => {
-            // Alternamos la clase 'hidden' para mostrar u ocultar el menú.
             mobileMenu.classList.toggle('hidden');
         });
     }
 
-    // --- Funcionalidad del Carrito de Compras (Simulación) ---
-    const addToCartButtons = document.querySelectorAll('.add-to-cart-btn');
-    const cartCountElement = document.getElementById('cart-count');
-    const notificationModal = document.getElementById('notification-modal');
-    
-    // Inicializamos el contador del carrito. Podríamos cargarlo de localStorage si quisiéramos persistencia.
-    let cartCount = 0;
+    // Carga inicial del contador del carrito
+    updateCartCount();
 
-    // Solo procedemos si encontramos los elementos necesarios en el DOM.
-    if (cartCountElement && notificationModal && addToCartButtons.length > 0) {
-        
-        // Iteramos sobre cada botón de "Añadir al carrito".
-        addToCartButtons.forEach(button => {
-            button.addEventListener('click', () => {
-                // 1. Incrementar el contador del carrito en la variable.
-                cartCount++;
-                // Actualizamos el texto del elemento en el HTML.
-                cartCountElement.textContent = cartCount;
-                
-                // 2. Animar el contador para dar feedback visual.
-                cartCountElement.classList.add('transform', 'scale-150', 'transition-transform', 'duration-200');
-                setTimeout(() => {
-                    // Removemos la clase de animación después de un breve período.
-                    cartCountElement.classList.remove('transform', 'scale-150');
-                }, 200);
-
-                // 3. Mostrar la notificación de "Producto añadido".
-                showNotification();
-            });
-        });
-
-        /**
-         * Muestra una notificación emergente en la esquina de la pantalla.
-         * La notificación aparece y se desvanece después de 3 segundos.
-         */
-        function showNotification() {
-            // Hacemos visible la notificación.
-            notificationModal.classList.remove('opacity-0', 'translate-y-10');
-            notificationModal.classList.add('opacity-100', 'translate-y-0');
-
-            // Configuramos un temporizador para ocultarla automáticamente.
-            setTimeout(() => {
-                notificationModal.classList.remove('opacity-100', 'translate-y-0');
-                notificationModal.classList.add('opacity-0', 'translate-y-10');
-            }, 3000); // La notificación se oculta después de 3 segundos.
-        }
-    }
+    // Escuchar cambios en el storage para actualizar el contador en tiempo real entre pestañas
+    window.addEventListener('storage', updateCartCount);
 });
