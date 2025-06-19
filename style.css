@@ -1,0 +1,17 @@
+/* style.css
+  Hoja de estilos personalizados para la tienda online.
+*/
+
+/* Aplicamos la fuente Inter como fuente principal a todo el cuerpo del documento */
+body {
+    font-family: 'Inter', sans-serif;
+}
+
+/* Clase de utilidad para una transición suave en todas las propiedades.
+  Se usa en enlaces, botones y tarjetas para animaciones al pasar el ratón por encima.
+*/
+.transition-all {
+    transition-property: all;
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+    transition-duration: 300ms;
+}
