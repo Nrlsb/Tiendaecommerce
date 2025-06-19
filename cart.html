@@ -48,9 +48,7 @@
             <h1 class="text-3xl lg:text-4xl font-extrabold text-gray-900 mb-8 text-center">Tu Carrito de Compras</h1>
             
             <div id="cart-container" class="bg-white p-6 md:p-8 rounded-lg shadow-lg">
-                <!-- Los artículos del carrito se insertarán aquí por JavaScript -->
                 <div id="cart-items-container">
-                    <!-- Ejemplo de un item (se borrará al cargar) -->
                      <p class="text-center text-gray-500">Tu carrito está vacío.</p>
                 </div>
 
@@ -68,10 +66,11 @@
                         <span>Total</span>
                         <span id="total-price">$10.00</span>
                     </div>
-
-                    <button class="w-full mt-6 bg-indigo-600 text-white font-semibold py-4 px-8 rounded-lg shadow-md hover:bg-indigo-700 transition-all text-lg">
+                    
+                    <!-- ACTUALIZACIÓN: Ahora es un enlace en lugar de un botón -->
+                    <a href="checkout.html" class="block text-center w-full mt-6 bg-indigo-600 text-white font-semibold py-4 px-8 rounded-lg shadow-md hover:bg-indigo-700 transition-all text-lg">
                         Proceder al Pago
-                    </button>
+                    </a>
                 </div>
             </div>
         </main>
@@ -88,9 +87,7 @@
         <p><i class="fa-solid fa-check-circle mr-2"></i>Producto añadido al carrito!</p>
     </div>
 
-    <!-- Script principal para funcionalidades compartidas -->
     <script src="script.js" defer></script>
-    <!-- Script específico de la página del carrito -->
     <script src="cart.js" defer></script>
 </body>
 </html>
